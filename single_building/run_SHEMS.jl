@@ -54,6 +54,8 @@ function set_SHEMS_parameters(h_start, h_end, h_predict, h_control, rolling_flag
                                 season="all", run="all", price="fix")
     # Initialize technical setup________________________________________________
     # Model_SHEMS(h_start, h_end, h_predict, h_control, big, rolling_flag, solver, mip_gap, output_flag, presolve_flag)
+    # mip_gap papier = 0.05f0
+    # mip_gap proposed = 0.024f0 
     m = Model_SHEMS(h_start, h_end, h_predict, h_control, 60, rolling_flag, "Cbc", 0.05f0, outputflag, -1,
                         season, run, price);
     # PV(eta)
@@ -109,9 +111,9 @@ end
 
 function write_to_results_file(results, m, objective=1, case=1, costfactor=1.0)
     date=211116;
-    CSV.write("single_building/results/$(date)_results_$(m.h_predict)_$(m.h_control)_$(m.h_start)-$(m.h_end)"*
+    CSV.write("results/$(date)_results_$(m.h_predict)_$(m.h_control)_$(m.h_start)-$(m.h_end)"*
                 "_$(objective)_$(case)_$(costfactor)_$(m.season)_$(m.run)_$(m.price).csv",
-                DataFrame(results), header=["Temp_FH", "Vol_HW",
+                DataFrame(results,:auto), header=["Temp_FH", "Vol_HW",
                 "Soc_B", "V_HW_plus", "V_HW_minus", "T_FH_plus", "T_FH_minus", "profits", "COP_FH",
                 "COP_HW","PV_DE", "B_DE", "GR_DE", "PV_B", "PV_GR", "PV_HP","GR_HP", "B_HP", "HP_FH", "HP_HW",
                 "month", "day", "hour", "horizon"]);
